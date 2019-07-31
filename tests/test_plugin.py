@@ -72,11 +72,6 @@ def pytest_test_items(testdir):
     return [item for item in testdir.getitems(PYTEST_FILE) if item.name != 'testrail']
 
 
-@freeze_time(FAKE_NOW)
-def test_testrun_name():
-    assert plugin.testrun_name() == 'Automated Run {}'.format(FAKE_NOW.strftime(plugin.DT_FORMAT))
-
-
 def test_failed_outcome(tr_plugin):
     assert plugin.get_test_outcome('failed') == plugin.PYTEST_TO_TESTRAIL_STATUS['failed']
 
@@ -228,13 +223,13 @@ def test_is_testrun_available(api_client, tr_plugin):
     tr_plugin.testrun_id = 100
 
     api_client.send_get.return_value = {'is_completed': False}
-    assert tr_plugin.is_testrun_available() is True
+    assert tr_plugin.is_testrun_available is True
 
-    api_client.send_get.return_value = {'error': 'An error occured'}
-    assert tr_plugin.is_testrun_available() is False
+    api_client.send_get.return_value = {'error': 'An error occurred'}
+    assert tr_plugin.is_testrun_available is False
 
     api_client.send_get.return_value = {'is_completed': True}
-    assert tr_plugin.is_testrun_available() is False
+    assert tr_plugin.is_testrun_available is False
 
 
 def test_is_testplan_available(api_client, tr_plugin):
@@ -242,13 +237,13 @@ def test_is_testplan_available(api_client, tr_plugin):
     tr_plugin.testplan_id = 100
 
     api_client.send_get.return_value = {'is_completed': False}
-    assert tr_plugin.is_testplan_available() is True
+    assert tr_plugin.is_testplan_available is True
 
-    api_client.send_get.return_value = {'error': 'An error occured'}
-    assert tr_plugin.is_testplan_available() is False
+    api_client.send_get.return_value = {'error': 'An error occurred'}
+    assert tr_plugin.is_testplan_available is False
 
     api_client.send_get.return_value = {'is_completed': True}
-    assert tr_plugin.is_testplan_available() is False
+    assert tr_plugin.is_testplan_available is False
 
 
 def test_get_available_testruns(api_client, tr_plugin):

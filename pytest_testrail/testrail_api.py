@@ -15,15 +15,12 @@ import sys
 import requests
 import time
 
-if sys.version_info.major == 2:
-    from urlparse import urljoin
-else:
-    from urllib.parse import urljoin
+from urllib.parse import urljoin
 
 
 class APIClient:
     def __init__(self, base_url, user, password, **kwargs):
-        '''
+        """
         Instantiate the APIClient class.
 
         :param base_url: The same TestRail address for the API client you also use to access TestRail with your web
@@ -41,7 +38,7 @@ class APIClient:
         :param timeout: (optional) How many seconds to wait for the server to send data before giving up, as a float,
             or a :ref:`(connect timeout, read timeout) <timeouts>` tuple.
         :type timeout: float or tuple
-        '''
+        """
         self.user = user
         self.password = password
         self._url = urljoin(base_url, 'index.php?/api/v2/')
@@ -50,7 +47,7 @@ class APIClient:
         self.timeout = kwargs.get('timeout', 10.0)
 
     def send_get(self, uri, **kwargs):
-        '''
+        """
         Send GET
 
         Issues a GET request (read) against the API and returns the result (as Python dict).
@@ -65,7 +62,7 @@ class APIClient:
         :param timeout: (optional) How many seconds to wait for the server to send data before giving up, as a float,
             or a :ref:`(connect timeout, read timeout) <timeouts>` tuple.
         :type timeout: float or tuple
-        '''
+        """
         cert_check = kwargs.get('cert_check', self.cert_check)
         headers = kwargs.get('headers', self.headers)
         timeout = kwargs.get('timeout', self.timeout)
@@ -82,12 +79,12 @@ class APIClient:
             pause = int(r.headers.get('Retry-After', 60))
             print("Too many requests: pause for {}s".format(pause))
             time.sleep(pause)
-            return self.send_get(uri,**kwargs)
+            return self.send_get(uri, **kwargs)
         else:
             return r.json()
 
     def send_post(self, uri, data, **kwargs):
-        '''
+        """
         Send POST
 
         Issues a POST request (write) against the API and returns the result (as Python dict).
@@ -104,7 +101,7 @@ class APIClient:
         :param timeout: (optional) How many seconds to wait for the server to send data before giving up, as a float,
             or a :ref:`(connect timeout, read timeout) <timeouts>` tuple.
         :type timeout: float or tuple
-        '''
+        """
         cert_check = kwargs.get('cert_check', self.cert_check)
         headers = kwargs.get('headers', self.headers)
         timeout = kwargs.get('timeout', self.timeout)
@@ -129,7 +126,7 @@ class APIClient:
     @staticmethod
     def get_error(json_response):
         """ Extract error contained in a API response.
-            If no error occured, return None
+            If no error occurred, return None
 
             :param json_response: json response of request
             :return: String of the error

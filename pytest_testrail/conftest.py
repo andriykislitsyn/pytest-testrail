@@ -1,12 +1,5 @@
-# -*- coding: UTF-8 -*-
 import os
-import sys
-if sys.version_info.major == 2:
-    # python2
-    import ConfigParser as configparser
-else:
-    # python3
-    import configparser
+import configparser
 
 from .plugin import PyTestRailPlugin
 from .testrail_api import APIClient
@@ -51,7 +44,8 @@ def pytest_addoption(parser):
         '--tr-testrun-suite-include-all',
         action='store_true',
         default=None,
-        help='Include all test cases in specified test suite when creating test run (config file: include_all in TESTRUN section)')
+        help='Include all test cases in specified test suite when creating test run '
+             '(config file: include_all in TESTRUN section)')
     group.addoption(
         '--tr-testrun-name',
         action='store',
@@ -62,13 +56,15 @@ def pytest_addoption(parser):
         action='store',
         default=0,
         required=False,
-        help='Identifier of testrun, that appears in TestRail. If provided, option "--tr-testrun-name" will be ignored')
+        help='Identifier of testrun, that appears in TestRail. '
+             'If provided, option "--tr-testrun-name" will be ignored')
     group.addoption(
         '--tr-plan-id',
         action='store',
         default=0,
         required=False,
-        help='Identifier of testplan, that appears in TestRail. If provided, option "--tr-testrun-name" will be ignored')
+        help='Identifier of testplan, that appears in TestRail. '
+             'If provided, option "--tr-testrun-name" will be ignored')
     group.addoption(
         '--tr-version',
         action='store',
@@ -97,6 +93,7 @@ def pytest_addoption(parser):
         required=False,
         help='Skip test cases that are not present in testrun')
 
+
 def pytest_configure(config):
     if config.getoption('--testrail'):
         cfg_file_path = config.getoption('--tr-config')
@@ -111,8 +108,10 @@ def pytest_configure(config):
                 assign_user_id=config_manager.getoption('tr-testrun-assignedto-id', 'assignedto_id', 'TESTRUN'),
                 project_id=config_manager.getoption('tr-testrun-project-id', 'project_id', 'TESTRUN'),
                 suite_id=config_manager.getoption('tr-testrun-suite-id', 'suite_id', 'TESTRUN'),
-                include_all=config_manager.getoption('tr-testrun-suite-include-all', 'include_all', 'TESTRUN', is_bool=True, default=False),
-                cert_check=config_manager.getoption('tr-no-ssl-cert-check', 'no_ssl_cert_check', 'API', is_bool=True, default=True),
+                include_all=config_manager.getoption('tr-testrun-suite-include-all', 'include_all', 'TESTRUN',
+                                                     is_bool=True, default=False),
+                cert_check=config_manager.getoption('tr-no-ssl-cert-check', 'no_ssl_cert_check', 'API', is_bool=True,
+                                                    default=True),
                 tr_name=config_manager.getoption('tr-testrun-name', 'name', 'TESTRUN'),
                 run_id=config.getoption('--tr-run-id'),
                 plan_id=config.getoption('--tr-plan-id'),
@@ -128,15 +127,15 @@ def pytest_configure(config):
 
 class ConfigManager(object):
     def __init__(self, cfg_file_path, config):
-        '''
-        Handles retrieving configuration values. Config options set in flags are given preferance over options set in the
-        config file.
+        """
+        Handles retrieving configuration values. Config options set in flags are given preference
+        over options set in the config file.
 
         :param cfg_file_path: Path to the config file containing information about the TestRail server.
         :type cfg_file_path: str or None
         :param config: Config object containing commandline flag options.
         :type config: _pytest.config.Config
-        '''
+        """
         self.cfg_file = None
         if os.path.isfile(cfg_file_path) or os.path.islink(cfg_file_path):
             self.cfg_file = configparser.ConfigParser()
