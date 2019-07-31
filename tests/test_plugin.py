@@ -72,25 +72,6 @@ def pytest_test_items(testdir):
     return [item for item in testdir.getitems(PYTEST_FILE) if item.name != 'testrail']
 
 
-def test_failed_outcome(tr_plugin):
-    assert plugin.get_test_outcome('failed') == plugin.PYTEST_TO_TESTRAIL_STATUS['failed']
-
-
-def test_successful_outcome(tr_plugin):
-    passed_outcome = plugin.PYTEST_TO_TESTRAIL_STATUS['passed']
-    assert plugin.get_test_outcome('passed') == passed_outcome
-
-
-def test_clean_test_ids():
-    assert list(plugin.clean_test_ids(['C1234', 'C12345'])) == [1234, 12345]
-
-
-def test_get_testrail_keys(pytest_test_items, testdir):
-    items = plugin.get_testrail_keys(pytest_test_items)
-    assert list(items[0][1]) == [1234, 5678]
-    assert list(items[1][1]) == [8765, 4321]
-
-
 def test_add_result(tr_plugin):
     status = TESTRAIL_TEST_STATUS["passed"]
     tr_plugin.add_result([1, 2], status, comment='ERROR!', duration=3600)
