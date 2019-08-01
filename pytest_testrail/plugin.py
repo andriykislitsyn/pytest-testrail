@@ -1,5 +1,6 @@
 """Reference: http://docs.gurock.com/testrail-api2/reference-statuses"""
 import re
+import textwrap
 from dataclasses import dataclass
 from datetime import datetime
 from queue import Queue
@@ -136,7 +137,8 @@ class PyTestRailPlugin:
         print(f'\n\n[{self.tr_prefix}] Start publishing')
         if self.results:
             tests_list = [str(result['case_id']) for result in self.results]
-            print(f'[{self.tr_prefix}] Testcases to publish: {", ".join(tests_list)}')
+            print(f'[{self.tr_prefix}] Testcases to publish:')
+            print(textwrap.fill(f', '.join(tests_list), 110))
 
             if self.testrun_id:
                 self.publish_results(self.testrun_id)
