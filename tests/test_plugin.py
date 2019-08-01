@@ -54,6 +54,7 @@ TESTPLAN = {
     }]
 }
 
+
 @pytest.fixture
 def api_client():
     spec = create_autospec(APIClient)
